@@ -18,10 +18,12 @@ package org.ws2ten1.jackson.rawvalue;
 import static com.jayway.jsonassert.JsonAssert.with;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Test for {@link JacksonRawValueDeserializationModule}.
  */
+@Slf4j
 public class JacksonRawValueDeserializationModuleTest {
 	
 	private ObjectMapper sut;
@@ -44,7 +47,7 @@ public class JacksonRawValueDeserializationModuleTest {
 	}
 	
 	@Test
-	public void testSerialize() throws Exception {
+	public void testDeserialize() throws Exception {
 		// setup
 		String json = "{\"str\":\"aa\",\"bool\":false,\"attributes\":{\"foo\":\"xx\",\"bar\":2}}";
 		// exercise
@@ -57,7 +60,20 @@ public class JacksonRawValueDeserializationModuleTest {
 	}
 	
 	@Test
-	public void testDeserialize() throws Exception {
+	public void testDeserialize_null() throws Exception {
+		// setup
+		String json = "{\"str\":\"aa\",\"bool\":false,\"attributes\":null}";
+		// exercise
+		ExampleModel actual = sut.readValue(json, ExampleModel.class);
+		// verify
+		assertThat(actual)
+			.returns("aa", ExampleModel::getStr)
+			.returns(false, ExampleModel::isBool)
+			.returns(null, ExampleModel::getAttributes);
+	}
+	
+	@Test
+	public void testSerialize() throws Exception {
 		// setup
 		ExampleModel model = new ExampleModel("aa", false, "{\"foo\":\"xx\",\"bar\":2}");
 		// exercise
@@ -68,6 +84,19 @@ public class JacksonRawValueDeserializationModuleTest {
 			.assertThat("$.bool", is(false))
 			.assertThat("$.attributes.foo", is("xx"))
 			.assertThat("$.attributes.bar", is(2));
+	}
+	
+	@Test
+	public void testSerialize_null() throws Exception {
+		// setup
+		ExampleModel model = new ExampleModel("aa", false, null);
+		// exercise
+		String actual = sut.writeValueAsString(model);
+		// verify
+		with(actual)
+			.assertThat("$.str", is("aa"))
+			.assertThat("$.bool", is(false))
+			.assertThat("$.attributes", is(nullValue()));
 	}
 	
 	

@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 public class JacksonRawValueDeserializationModule extends SimpleModule {
 	
 	private static final Version VERSION =
-			new Version(1, 0, 0, null, "org.ws2ten1", "ws2ten1-jackson");
+			new Version(1, 0, 0, null, "org.ws2ten1", "ws2ten1-jackson-raw-value");
 	
 	
 	/**
