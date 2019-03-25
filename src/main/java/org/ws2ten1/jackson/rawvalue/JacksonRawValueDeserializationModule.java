@@ -18,6 +18,10 @@ package org.ws2ten1.jackson.rawvalue;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
+/**
+ * Jackson module to deserialize {@link com.fasterxml.jackson.annotation.JsonRawValue} annotated property.
+ */
+@SuppressWarnings("serial")
 public class JacksonRawValueDeserializationModule extends SimpleModule {
 	
 	private static final Version VERSION =
