@@ -3,4 +3,4 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = 'ws2ten1-jackson-raw-value'
+rootProject.name = 'polycreo-jackson-raw-value'
